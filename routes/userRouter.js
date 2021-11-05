@@ -6,7 +6,7 @@ const user = require("../usecases/users");
 
 router.get("/:idUser",isMember,async (request, response, next)=>{
     //const {idUser} = request.params   
-    const idUser=request.id;
+    //const idUser=request.id;
     console.log(idUser);
     try{    
         const userId = await user.getById(idUser)
