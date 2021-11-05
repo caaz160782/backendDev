@@ -1,11 +1,13 @@
 const express=  require("express");
 const router = express.Router()
-const { isMember }= require("../middlewares/authHandlers");
+const {isAdmin, isMember }= require("../middlewares/authHandlers");
 const user = require("../usecases/users");
 
 
 router.get("/:idUser",isMember,async (request, response, next)=>{
-    const {idUser} = request.params   
+    //const {idUser} = request.params   
+    const idUser=request.id;
+    console.log(idUser);
     try{    
         const userId = await user.getById(idUser)
         response.json({
@@ -23,7 +25,7 @@ router.get("/:idUser",isMember,async (request, response, next)=>{
   }
 })
 //estos se mostrarian solo al administrador
-router.get("/",async (request, response ,next)=>{
+router.get("/",isAdmin,async (request, response ,next)=>{
    try{    
     const users= await user.get();
     response.json({
@@ -56,7 +58,7 @@ router.post('/',async (request,response,next) =>{
    } 
 })
 
-router.patch('/:idUser',async (request,response,next) =>{
+router.patch('/:idUser',isMember,async (request,response,next) =>{
     const {idUser} = request.params;
     const userData=request.body
     try{
@@ -78,7 +80,7 @@ router.patch('/:idUser',async (request,response,next) =>{
    }
 })
 
-router.delete('/:idUser',(request,response,next) =>{
+router.delete('/:idUser',isAdmin,(request,response,next) =>{
   try{
     const {idUser} = request.params;
     const userId= user.del(idUser);

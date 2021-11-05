@@ -20,23 +20,23 @@ const find=async (userAccess)=>{
     const found = await User.findOne({userName}).exec();   
    //console.log(found)
    if(found !== null){
-
-    const {_id,fullName,role,password} = found;
-    const match = await hash.verifyPassword(pasword,password);
-    if(match){
-        const payload = {
-                         sub:_id.toString(),
-                         name:`${fullName}`, 
-                         role
-                       }
-       const token =  jwt.token(payload)       
-       return {token}
-    }else{
-        return 404
+        const {_id,fullName,role,password} = found;
+        const match = await hash.verifyPassword(pasword,password);
+        if(match){
+            const payload = {
+                            sub:_id.toString(),
+                            name:`${fullName}`, 
+                            role
+                        }
+        const token =  jwt.token(payload)       
+        return {token}
+        }
+    else{
+    return {status:404, message:"No encontrado"}
       }     
-     }
+    }
      else{
-        return 404
+        return {status:404, message:"No registrado"}
      }
 }
 
