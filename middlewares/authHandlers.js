@@ -20,9 +20,8 @@ const isMember = (req, res, next) => {
       {
         try
         {
-          const verify = jwt.verify(apitoken ); 
-          //console.log("tok",verify)
-          const {role,sub} =verify
+          const verify = jwt.verify(apitoken ); //valida que el token se valido
+          const {role,sub} = verify
              if (role === "member") {
                  req.id=sub; 
                  next();
@@ -56,6 +55,4 @@ const isMember = (req, res, next) => {
         message: "Unauthorized",})
       }   
 };
-
-
 module.exports = {isAdmin,isMember};
