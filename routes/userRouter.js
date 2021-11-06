@@ -3,11 +3,8 @@ const router = express.Router()
 const {isAdmin, isMember }= require("../middlewares/authHandlers");
 const user = require("../usecases/users");
 
-
 router.get("/:idUser",isMember,async (request, response, next)=>{
-    //const {idUser} = request.params   
-    //const idUser=request.id;
-    console.log(idUser);
+    const {idUser} = request.params   
     try{    
         const userId = await user.getById(idUser)
         response.json({
@@ -24,6 +21,7 @@ router.get("/:idUser",isMember,async (request, response, next)=>{
    })
   }
 })
+
 //estos se mostrarian solo al administrador
 router.get("/",isAdmin,async (request, response ,next)=>{
    try{    
@@ -40,7 +38,7 @@ router.get("/",isAdmin,async (request, response ,next)=>{
    next(error)
  } 
 })
-
+//crea a todos
 router.post('/',async (request,response,next) =>{
    try{
     const userData= request.body;
@@ -57,27 +55,38 @@ router.post('/',async (request,response,next) =>{
      next(error)
    } 
 })
-
+//modificar usuario
 router.patch('/:idUser',isMember,async (request,response,next) =>{
     const {idUser} = request.params;
+    const userId=request.id;
     const userData=request.body
-    try{
-        const userUpdate=  await user.update(idUser,userData); 
-        response.status(201).json({
-            ok: true,
-            message: `Actualizado`,
-           listUser:{
-              userUpdate
-            },
-        })         
-   }
-   catch (error){
-   //  next(error)
-   response.status(404).json({
+    if(idUser === userId)
+    {
+        try{
+            const userUpdate=  await user.update(idUser,userData); 
+                 response.status(201).json({
+                              ok: true,
+                              message: `Actualizado`,
+                              listUser:{
+                              userUpdate
+                              },
+                   })         
+        }
+        catch (error){
+        next(error)
+        response.status(404).json({
+                ok:false,
+                message:"User not found"
+            })
+        }
+    }
+  else{
+    response.status(404).json({
         ok:false,
-        message:"User not found"
+        message: "Unauthorized",
+        
     })
-   }
+  }
 })
 
 router.delete('/:idUser',isAdmin,(request,response,next) =>{
