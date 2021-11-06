@@ -17,6 +17,7 @@ const schema = new Schema({
        unique:true,
     },    
     role:String,
+    pictureProfileUser:String,
     password: {
         type: String,
         required: true,
