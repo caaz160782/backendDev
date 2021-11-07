@@ -41,20 +41,22 @@ router.get("/:idPost",async (request, response, next)=>{
 ///crear post
 router.post('/',isMember,async (request,response,next) =>{
     try{
-     const userPosts= request.body;
-     const postCreated= await post.create(userPosts);
-     response.status(201).json({
+      //console.log("post create 11")
+      const userPosts = request.body;
+      const userId=request.id;
+     // console.log(userId,userPosts)
+      const postCreated= await post.create(userId,userPosts);
+      response.status(201).json({
          ok: true,
          message: "Created successfully",
-         payload:{
-            postCreated
-         },
-     }) 
+         payload:  postCreated  ,
+     })
     }
      catch (error){
       next(error)
     } 
  })
+
  //modificar
  router.patch('/:idPost',isMember,async (request,response,next) =>{
     const {idPost}   = request.params;
@@ -90,15 +92,17 @@ router.post('/',isMember,async (request,response,next) =>{
     }   
 })
 
-router.delete('/:idPost',isMember,async(request,response,next) =>{
-  const {idPost}   = request.params;
-  const userId = request.id;  
-  const postInfo = await post.getById(idPost)
-  if(postInfo !==null){
-    const {usuario}= postInfo
-      if(userId ===usuario.toString())   
-      { 
-        try{
+router.delete('/:idPost',isMember,async(request,response,next) =>
+{
+   const {idPost}   = request.params;
+   const userId = request.id;  
+   const postInfo = await post.getById(idPost)
+   if(postInfo !==null){
+    const {usuario }= postInfo
+    const {_id}=usuario
+      if(userId ===_id.toString())   
+       { 
+         try{
           const {idPost} = request.params;
           const postId= post.del(idPost);
           response.status(202).json({

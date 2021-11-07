@@ -7,8 +7,9 @@ const get =async() =>{
 }
 //post by id
 const getById = async (postId)=>{
-    const post= await Post.findById(postId).exec();
+   // const post= await Post.findById(postId).exec();
    // const allPost= await Post.find({}).populate("usuario",'userName') ;
+   const post= await Post.findById(postId).populate("usuario",['userName','pictureProfileUser']) ;
     return post;
 }
 //buscar
@@ -22,17 +23,18 @@ const find=async (titlePost)=>{
         }
 }
 //crear post
-const create = async (postData) => {
-    const {titlePost,txtPost,usuario,tags,imgUrlPostTiltle,imgUrlPostContent,fecha} =  postData; 
-    const  post = new Post({titlePost,txtPost,usuario,tags,imgUrlPostTiltle,imgUrlPostContent,fecha});
+const create = async (Userid,postData) => {
+    
+    const {titlePost,txtPost,tags,imgUrlPostTiltle,fecha} =  postData; 
+    const  post = new Post({titlePost,txtPost,usuario:Userid,tags,imgUrlPostTiltle,fecha});
     const  savedPost= await post.save();
     return savedPost;
 };
 
 //modificar post update
 const update =async (postId,postData) =>{
-    const {titlePost,txtPost,tags,imgUrlPostTiltle,imgUrlPostContent,fecha} =  postData; 
-    return Post.findByIdAndUpdate(postId,{titlePost,txtPost,tags,imgUrlPostTiltle,imgUrlPostContent,fecha}).exec();
+    const {titlePost,txtPost,tags,imgUrlPostTiltle,fecha} =  postData; 
+    return Post.findByIdAndUpdate(postId,{titlePost,txtPost,tags,imgUrlPostTiltle,fecha}).exec();
 }
 
 //delete post 

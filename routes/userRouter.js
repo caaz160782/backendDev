@@ -67,9 +67,6 @@ router.patch('/:idUser',isMember,async (request,response,next) =>{
     const {idUser}   =request.params;
     const   userId   =request.id;
     const userData   =request.body
-    //console.log(userData);
-
-    
     if(idUser === userId)
     {
         try{
