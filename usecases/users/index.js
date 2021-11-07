@@ -16,8 +16,8 @@ const getById = async (userId)=>{
 
 //login
 const find=async (userAccess)=>{
-    const{ userName,pasword} =  userAccess;     
-    const found = await User.findOne({userName}).exec();   
+    const{ email,pasword} =  userAccess;     
+    const found = await User.findOne({email}).exec();   
    //console.log(found)
    if(found !== null){
         const {_id,fullName,role,password} = found;
@@ -42,25 +42,29 @@ const find=async (userAccess)=>{
 
 //crear user
 const create = async (userData) => {
-     const {fullName,userName,password,role="member"} =  userData; 
-     const  passwordHash= await hash.hashPassword(password);          
-     const  user = new User({fullName,role,userName,password:passwordHash});
+     const {fullName,userName,email,pictureProfileUser="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQeik6d5EHLTi89m_CKLXyShylk4L92YflpJQ&usqp=CAU", pasword,role="member"} =  userData; 
+     const  passwordHash= await hash.hashPassword(pasword);          
+     //const  user = new User({fullName,role,userName,password:passwordHash});
+     const  user = new User({fullName,role,userName,email,pictureProfileUser,password:passwordHash});
      const  savedUser= await user.save();
      return savedUser;
 };
-
 /*
 //eliminar
 const del = (userId)=>{
     return User.findByIdAndDelete(userId).exec()
 }
 */
-
 //update
 const update =async (userId,userData) =>{
-     const{fullName,password } =  userData;  
-     return User.findByIdAndUpdate(userId,{fullName,password }).exec() ;
+      const{fullName,password } =  userData;  
+            if(password !== ""){
+                const  passwordHash= await hash.hashPassword(password);      
+                return User.findByIdAndUpdate(userId,{fullName,password:passwordHash}).exec() ;
+             }
+            else{
+                return User.findByIdAndUpdate(userId,{fullName}).exec() ;
+     }
 }
 
-//module.exports = {get, getById, create,del,update,find}
 module.exports = {get, getById,create,update,find}

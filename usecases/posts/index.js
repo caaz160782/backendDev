@@ -2,7 +2,7 @@ const Post = require("../../models/posts").model;
  //listar todos post
 const get =async() =>{    
     //const allPost= await Post.find({}).exec();
-    const allPost= await Post.find({}).populate("usuario",'userName') ;
+    const allPost= await Post.find({}).populate("usuario",['userName','pictureProfileUser']) ;
     return allPost;
 }
 //post by id

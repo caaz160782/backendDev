@@ -19,9 +19,7 @@ const schema = new Schema({
     },    
     usuario: {
         type: Schema.ObjectId,
-        ref:"User",
-        //type: Number,
-        //type:String,
+        ref:"User",     
         required: true,        
        },
     tags :{ 

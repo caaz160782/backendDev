@@ -2,6 +2,9 @@ const express=  require("express");
 const router = express.Router()
 const {isAdmin, isMember }= require("../middlewares/authHandlers");
 const user = require("../usecases/users");
+const { check } = require("express-validator")
+const {validarCampos}= require("../middlewares/validarCampos");
+const {emailExiste,existeuserName} =require("../lib/verificar")
 
 router.get("/:idUser",isMember,async (request, response, next)=>{
     const {idUser} = request.params   
@@ -23,7 +26,7 @@ router.get("/:idUser",isMember,async (request, response, next)=>{
 })
 
 //estos se mostrarian solo al administrador
-router.get("/",isAdmin,async (request, response ,next)=>{
+router.get("/",async (request, response ,next)=>{
    try{    
     const users= await user.get();
     response.json({
@@ -39,12 +42,16 @@ router.get("/",isAdmin,async (request, response ,next)=>{
  } 
 })
 //crea a todos
-router.post('/',async (request,response,next) =>{
+router.post('/',[check('email').custom(emailExiste),
+                 check('userName').custom(existeuserName),
+                 check("role", "no es un rol permitido").isIn('admin', 'member'),
+                 validarCampos]
+                ,async (request,response,next) =>{
    try{
     const userData= request.body;
     const userCreated= await user.create(userData);
     response.status(201).json({
-        ok: true,
+        status: "ok",
         message: "Created successfully",
         payload:{
             userCreated
@@ -57,9 +64,12 @@ router.post('/',async (request,response,next) =>{
 })
 //modificar usuario
 router.patch('/:idUser',isMember,async (request,response,next) =>{
-    const {idUser} = request.params;
-    const userId=request.id;
-    const userData=request.body
+    const {idUser}   =request.params;
+    const   userId   =request.id;
+    const userData   =request.body
+    //console.log(userData);
+
+    
     if(idUser === userId)
     {
         try{
@@ -75,7 +85,7 @@ router.patch('/:idUser',isMember,async (request,response,next) =>{
         catch (error){
         next(error)
         response.status(404).json({
-                ok:false,
+                status:false,
                 message:"User not found"
             })
         }

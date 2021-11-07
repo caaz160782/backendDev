@@ -6,13 +6,11 @@ const {isMember }= require("../middlewares/authHandlers");
 //recuperar todos los post
 router.get("/",async (request, response ,next)=>{
     try{    
-     const allPost= await post.get();
-     response.json({
-         ok:true,
-         message:"Done",
-         listUser:{
-            allPost
-         }
+     // console.log(1);
+     const posts= await post.get();
+     
+     response.status(202).json({
+         payload: posts
      })
    }
     catch (error){
@@ -23,14 +21,12 @@ router.get("/",async (request, response ,next)=>{
 //by id
 router.get("/:idPost",async (request, response, next)=>{
     const {idPost} = request.params   
-    //const idUser=request.id;
-    //console.log(idUser);
     try{    
         const postInfo = await post.getById(idPost)
         response.json({
                 ok:true,
                 message:"Done",
-                listPost:{ postInfo },
+                payload: postInfo
             })
      }
     catch (error){
@@ -92,38 +88,42 @@ router.post('/',isMember,async (request,response,next) =>{
           message:"Post not modificado"
       })
     }   
-
 })
 
 router.delete('/:idPost',isMember,async(request,response,next) =>{
   const {idPost}   = request.params;
-  const  postsData = request.body 
-  const userId=request.id;
-
+  const userId = request.id;  
   const postInfo = await post.getById(idPost)
-
-  const {usuario}=postInfo
-  if(userId ===usuario.toString())   
-   { 
-    try{
-      const {idPost} = request.params;
-      const postId= post.del(idPost);
-      response.status(202).json({
-          success: true,
-          message: `Deleted  successfully`,        
-      })  
-     }
-     catch (error){
-      next(error)
-    } 
-   }
-   else
-   {
-     response.status(404).json({
+  if(postInfo !==null){
+    const {usuario}= postInfo
+      if(userId ===usuario.toString())   
+      { 
+        try{
+          const {idPost} = request.params;
+          const postId= post.del(idPost);
+          response.status(202).json({
+              success: true,
+              message: `Deleted  successfully`,        
+          })  
+        }
+        catch (error){
+          next(error)
+        } 
+      }
+      else
+      {
+        response.status(404).json({
+          ok:false,
+          message:"this operation is not possible"
+        })
+      }
+  }
+  else{
+      response.status(404).json({
       ok:false,
-      message:"Delete not modificado"
-     })
-   } 
+      message:"this operation is not possible"
+    })
+  } 
 })
 
- module.exports = router;
+module.exports = router;

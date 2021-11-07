@@ -1,9 +1,12 @@
 const express=  require("express");
 const router = express.Router()
 const user = require("../usecases/users");
+const {validarCampos}= require("../middlewares/validarCampos");
+const { check } = require("express-validator")
 
 
-router.post('/',async (request,response,next) =>{
+
+router.post('/',[check("email", "el correo no es valido").isEmail(),validarCampos] ,async (request,response,next) =>{
     try{
      const userAccess= request.body;
      const resFind= await user.find(userAccess);
@@ -17,6 +20,7 @@ router.post('/',async (request,response,next) =>{
        const {token}=resFind;
           response.status(202).json({
            status: "ok",
+           vim: 95142,
            token :token,
       })     
      }
