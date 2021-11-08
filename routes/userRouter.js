@@ -110,4 +110,6 @@ router.delete('/:idUser',isAdmin,(request,response,next) =>{
   } 
 })
 
+
+
 module.exports = router;
