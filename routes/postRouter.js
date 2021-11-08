@@ -59,13 +59,15 @@ router.post('/',isMember,async (request,response,next) =>{
 
  //modificar
  router.patch('/:idPost',isMember,async (request,response,next) =>{
-    const {idPost}   = request.params;
-    const  postsData = request.body 
-    const userId=request.id;
-    const postInfo = await post.getById(idPost)
-    const {usuario}=postInfo
-    if(userId ===usuario.toString())   
-     { 
+  const {idPost}   = request.params;
+  const postsData = request.body;
+  const userId = request.id;  
+  const postInfo = await post.getById(idPost)
+  if(postInfo !==null){
+   const {usuario }= postInfo
+   const {_id}=usuario
+
+     if(userId ===_id.toString())
           try{
               const postUpdate=  await post.update(idPost,postsData); 
               response.status(201).json({

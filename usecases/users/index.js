@@ -18,9 +18,8 @@ const getById = async (userId)=>{
 const find=async (userAccess)=>{
     const{ email,pasword} =  userAccess;     
     const found = await User.findOne({email}).exec();   
-   //console.log(found)
-   if(found !== null){
-        const {_id,fullName,role,password} = found;
+    if(found !== null){
+        const {_id,fullName,role,password,userName,email,pictureProfileUser} = found;
         const match = await hash.verifyPassword(pasword,password);
         if(match){
             const payload = {
@@ -29,7 +28,7 @@ const find=async (userAccess)=>{
                             role
                         }
         const token =  jwt.token(payload)       
-        return {token}
+        return {token,fullName,userName,email,_id,pictureProfileUser}
         }
     else{
     return {status:404, message:"No encontrado"}
@@ -57,14 +56,16 @@ const del = (userId)=>{
 */
 //update
 const update =async (userId,userData) =>{
-      const{fullName,password } =  userData;  
+    
+    const{fullName,pictureProfileUser,userName,password} =  userData;  
             if(password !== ""){
                 const  passwordHash= await hash.hashPassword(password);      
-                return User.findByIdAndUpdate(userId,{fullName,password:passwordHash}).exec() ;
+                return User.findByIdAndUpdate(userId,{fullName,pictureProfileUser,userName,password:passwordHash},{new: true}).exec() ;
              }
             else{
-                return User.findByIdAndUpdate(userId,{fullName}).exec() ;
+                return User.findByIdAndUpdate(userId,{fullName,pictureProfileUser,userName},{new: true}).exec() ;
      }
-}
+
+ }
 
 module.exports = {get, getById,create,update,find}

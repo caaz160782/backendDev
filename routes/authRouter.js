@@ -17,11 +17,18 @@ router.post('/',[check("email", "el correo no es valido").isEmail(),validarCampo
             message
         })
      }else{
-       const {token}=resFind;
+          const {token,_id,fullName,userName,email,pictureProfileUser}=resFind;          
           response.status(202).json({
            status: "ok",
            vim: 95142,
            token :token,
+           user:{
+              _id, 
+              fullName,
+              userName,
+              email,
+              pictureProfileUser
+           }
       })     
      }
     }

@@ -29,19 +29,13 @@ const schema = new Schema({
     imgUrlPostTiltle:{
         type: String,
         required: false,
-        //trim: true,
-       //maxlenght:50,
        minlenght: 1,
-       //unique:true, 
-    },
+     },
     imgUrlPostContent:{
         type: String,
         required: false,
-        //trim: true,
-       //maxlenght:50,
        minlenght: 1,
-       //unique:true, 
-    },
+     },
     fecha:{
         type: Date
     },

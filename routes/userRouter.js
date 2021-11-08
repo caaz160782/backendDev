@@ -66,18 +66,16 @@ router.post('/',[check('email').custom(emailExiste),
 router.patch('/:idUser',isMember,async (request,response,next) =>{
     const {idUser}   =request.params;
     const   userId   =request.id;
-    const userData   =request.body
+    const userData   =request.body 
     if(idUser === userId)
     {
-        try{
-            const userUpdate=  await user.update(idUser,userData); 
-                 response.status(201).json({
+       try{
+           const userUpdate=  await user.update(idUser,userData); 
+            response.status(201).json({
                               ok: true,
                               message: `Actualizado`,
-                              listUser:{
                               userUpdate
-                              },
-                   })         
+               })       
         }
         catch (error){
         next(error)

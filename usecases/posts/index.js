@@ -2,14 +2,12 @@ const Post = require("../../models/posts").model;
  //listar todos post
 const get =async() =>{    
     //const allPost= await Post.find({}).exec();
-    const allPost= await Post.find({}).populate("usuario",['userName','pictureProfileUser']) ;
+    const allPost= await Post.find({}).populate("usuario",['userName','pictureProfileUser']).sort('fecha') ;
     return allPost;
 }
 //post by id
 const getById = async (postId)=>{
-   // const post= await Post.findById(postId).exec();
-   // const allPost= await Post.find({}).populate("usuario",'userName') ;
-   const post= await Post.findById(postId).populate("usuario",['userName','pictureProfileUser']) ;
+    const post= await Post.findById(postId).populate("usuario",['userName','pictureProfileUser']) ;
     return post;
 }
 //buscar
