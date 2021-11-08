@@ -57,13 +57,14 @@ const del = (userId)=>{
 */
 //update
 const update =async (userId,userData) =>{
-      const{fullName,password } =  userData;  
+      const{fullName,password, userName } =  userData;  
+      console.log(userData);
             if(password !== ""){
                 const  passwordHash= await hash.hashPassword(password);      
-                return User.findByIdAndUpdate(userId,{fullName,password:passwordHash}).exec() ;
+                return User.findByIdAndUpdate(userId,{fullName,userName,password:passwordHash}).exec() ;
              }
             else{
-                return User.findByIdAndUpdate(userId,{fullName}).exec() ;
+                return User.findByIdAndUpdate(userId,{fullName, userName}).exec() ;
      }
 }
 
