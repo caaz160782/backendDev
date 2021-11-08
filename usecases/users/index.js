@@ -56,6 +56,7 @@ const del = (userId)=>{
 */
 //update
 const update =async (userId,userData) =>{
+<<<<<<< HEAD
     
     const{fullName,pictureProfileUser,userName,password} =  userData;  
             if(password !== ""){
@@ -64,6 +65,16 @@ const update =async (userId,userData) =>{
              }
             else{
                 return User.findByIdAndUpdate(userId,{fullName,pictureProfileUser,userName},{new: true}).exec() ;
+=======
+      const{fullName,password, userName } =  userData;  
+      console.log(userData);
+            if(password !== ""){
+                const  passwordHash= await hash.hashPassword(password);      
+                return User.findByIdAndUpdate(userId,{fullName,userName,password:passwordHash}).exec() ;
+             }
+            else{
+                return User.findByIdAndUpdate(userId,{fullName, userName}).exec() ;
+>>>>>>> c2e872a1ded848a42500b0ee52fe39cf8f38502f
      }
 
  }
