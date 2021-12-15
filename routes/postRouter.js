@@ -41,10 +41,8 @@ router.get("/:idPost",async (request, response, next)=>{
 ///crear post
 router.post('/',isMember,async (request,response,next) =>{
     try{
-      //console.log("post create 11")
       const userPosts = request.body;
       const userId=request.id;
-     // console.log(userId,userPosts)
       const postCreated= await post.create(userId,userPosts);
       response.status(201).json({
          ok: true,

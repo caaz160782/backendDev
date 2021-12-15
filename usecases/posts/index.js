@@ -1,5 +1,6 @@
 const Post = require("../../models/posts").model;
- //listar todos post
+ 
+//listar todos post
 const get =async() =>{    
     //const allPost= await Post.find({}).exec();
     const allPost= await Post.find({}).populate("usuario",['userName','pictureProfileUser']).sort('fecha') ;

@@ -2,12 +2,12 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const schema = new Schema({
     fullName:{
-        type: String,       
+        type: String,
             trim: true,
        maxlenght:20,
        minlenght: 1,
        required: false,
-    },    
+    },
     userName:{
         type: String,
         required: true,
@@ -23,7 +23,7 @@ const schema = new Schema({
        maxlenght:50,
        minlenght: 1,
        unique:true,
-    },        
+    },
     role:{
         type:String,
     },
@@ -35,9 +35,9 @@ const schema = new Schema({
         required: true,
         minlenght:1,
     },
-});  
+});
 
 module.exports= {
     model: mongoose.model("User", schema),
-    schema,            
+    schema,
 };
